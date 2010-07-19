@@ -37,7 +37,7 @@ package cssx.ast {
 			}
 		}
 
-		private def intersect(x: CssSelector, y: CssSelector)(op: (CssSelector, CssSelector) => CssSelector): CssSelector = {
+		private def crossProduct(x: CssSelector, y: CssSelector)(op: (CssSelector, CssSelector) => CssSelector): CssSelector = {
 			mkList(for{
 				a <- x.toList
 				b <- y.toList
@@ -57,8 +57,8 @@ package cssx.ast {
 
 		def &(that: CssSelector) = CssSelectorList(this, that)
 		def %(that: String) = mkList(this.toList map { x => CssClassSelector(Some(x), that) })
-		def \(that: CssSelector) = intersect(this, that) { CssDescendantSelector(_, _) }
-		def >(that: CssSelector) = intersect(this, that) { CssChildSelector(_, _) }
+		def \(that: CssSelector) = crossProduct(this, that) { CssDescendantSelector(_, _) }
+		def >(that: CssSelector) = crossProduct(this, that) { CssChildSelector(_, _) }
 		def ##(that: String) = mkList(this.toList map { x => CssIdSelector(Some(x), that) })
 	}
 
