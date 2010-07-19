@@ -23,9 +23,9 @@ object Main {
 				// (div > div#identifier.class0 > div, div > div.class1 > div)
 				// and (div, span). It is equivalent to the following CSS selector:
 				//
-				// div > div#identifier.class0 > div div
-				// div > div#identifier.class0 > div span
-				// div > div.class1 > div div
+				// div > div#identifier.class0 > div div,
+				// div > div#identifier.class0 > div span,
+				// div > div.class1 > div div,
 				// div > div.class1 > div span
 				div & span is {
 					h1 & h2 is {
