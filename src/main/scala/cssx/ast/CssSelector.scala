@@ -49,10 +49,17 @@ package cssx.ast {
 
 		override def toString = name
 
+		def and(that: CssSelector) = &(that)
+		def withClass(that: String) = %(that)
+		def withDescendant(that: CssSelector) = \(that)
+		def withChild(that: CssSelector) = >(that)
+		def withId(that: String) = ##(that)
+
 		def &(that: CssSelector) = CssSelectorList(this, that)
 		def %(that: String) = mkList(this.toList map { x => CssClassSelector(Some(x), that) })
 		def \(that: CssSelector) = intersect(this, that) { CssDescendantSelector(_, _) }
 		def >(that: CssSelector) = intersect(this, that) { CssChildSelector(_, _) }
+		def ##(that: String) = mkList(this.toList map { x => CssIdSelector(Some(x), that) })
 	}
 
 	case class CssChildSelector(parent: CssSelector, child: CssSelector) extends CssSelector {
@@ -70,10 +77,19 @@ package cssx.ast {
 		override def toList = a.toList ::: b.toList
 	}
 
-	case class CssClassSelector(prefix: Option[CssSelector], `class`: String) extends CssSelector  {
+	case class CssClassSelector(prefix: Option[CssSelector], `class`: String) extends CssSelector {
 		override def name = prefix match {
 			case Some(p) => p.toString+"."+`class`
-			case None => "."+`class`  
+			case None => "."+`class`
+		}
+
+		override def toList = this :: Nil
+	}
+
+	case class CssIdSelector(prefix: Option[CssSelector], id: String) extends CssSelector {
+		override def name = prefix match {
+			case Some(p) => p.toString+"#"+id
+			case None => "#"+id
 		}
 
 		override def toList = this :: Nil
@@ -116,7 +132,7 @@ package cssx.ast {
 	case object dt extends StringBasedSelector("dt")
 	case object em extends StringBasedSelector("em")
 	case object fieldset extends StringBasedSelector("fieldset")
-	case object font extends StringBasedSelector("font")
+	case object font_ extends StringBasedSelector("font")
 	case object form extends StringBasedSelector("form")
 	case object frame extends StringBasedSelector("frame")
 	case object frameset extends StringBasedSelector("frameset")

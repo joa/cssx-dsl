@@ -24,10 +24,6 @@ package cssx.ast {
 	 */
 	sealed trait CssValue
 
-	abstract class StringBasedValue {
-
-	}
-
 	case class CssPxValue(value: Int) extends CssValue {
 		def px = this
 		override def toString = value.toString+"px"
@@ -37,7 +33,12 @@ package cssx.ast {
 		def em = this
 		override def toString = value.toString+"em"
 	}
-	
+
+	case class CssPercentValue(value: Double) extends CssValue {
+		def percent = this
+		override def toString = value.toString+"%"
+	}
+
 	case class CssIntValue(value: Int) extends CssValue {
 		override def toString = value.toString
 	}

@@ -20,6 +20,8 @@
  */
 package cssx.ast {
 	/**
+	 * The CssStylesheet class represents the toplevel element of the Css AST.
+	 * 
 	 * @author Joa Ebert
 	 */
 	case class CssStylesheet(statements: List[CssStatement]) {

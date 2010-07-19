@@ -20,14 +20,21 @@
  */
 package cssx.ast {
 	/**
+	 * The CssStatement trait represents a css statement.
+	 * 
 	 * @author Joa Ebert
 	 */
 	sealed trait CssStatement
 
 	/**
+	 * The CssRuleset class represents a css ruleset.
+	 *
+	 * A Css ruleset consists of a selector and a list of declarations which
+	 * apply to the element matched by the selector.
+	 * 
 	 * @author Joa Ebert
 	 */
 	case class CssRuleset(selector: CssSelector, declarations: List[CssDeclaration]) extends CssStatement {
-		override def toString = selector.toString+" {\n"+(declarations mkString "\n")+"\n}"
+		override def toString = selector.toString+"{"+(declarations mkString ";")+"}"
 	}
 }

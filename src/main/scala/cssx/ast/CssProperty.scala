@@ -20,10 +20,19 @@
  */
 package cssx.ast {
 	/**
+	 * The CssProperty trait represents a css property identifier.
+	 *
 	 * @author Joa Ebert
 	 */
 	sealed trait CssProperty {
+		/**
+		 * The string representation of the property.
+		 */
 		def name: String
+
+		/**
+		 * The string representation of the current object.
+ 		 */
 		override def toString = name
 	}
 

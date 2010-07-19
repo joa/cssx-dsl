@@ -21,9 +21,23 @@
 package cssx.ast {
 
 	/**
+	 * The CssDeclaration trait represents a css declaration.
+	 * 
 	 * @author Joa Ebert
 	 */
-	case class CssDeclaration(property: CssProperty, value: CssValue) {
-		override def toString = property.toString+": "+value.toString
+	case class CssDeclaration(
+			/**
+			 * The property of the declaration.
+			 */
+			property: CssProperty,
+			/**
+			 * The value of the declaration.
+			 */
+			value: CssValue) {
+
+		/**
+		 * The string representation of the current object.
+		 */
+		override def toString = property.toString+":"+value.toString
 	}
 }

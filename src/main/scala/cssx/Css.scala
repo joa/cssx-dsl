@@ -49,9 +49,14 @@ package cssx {
 
 		implicit def withDeclaration(value: CssProperty): Declaration = newDeclaration(value)
 		implicit def withRuleset(value: CssSelector): Ruleset = newRuleset(value)
-		implicit def intToPx(value: Int): CssPxValue = CssPxValue(value)
-		implicit def intToEm(value: Int): CssEmValue = doubleToEm(value.toDouble)
-		implicit def doubleToEm(value: Double): CssEmValue = CssEmValue(value)
+
+		implicit def intToPx(value: Int) = CssPxValue(value)
+		implicit def intToEm(value: Int) = doubleToEm(value.toDouble)
+		implicit def doubleToEm(value: Double) = CssEmValue(value)
+		implicit def intToPercent(value: Int) = doubleToPercent(value.toDouble)
+		implicit def doubleToPercent(value: Double) = CssPercentValue(value)
+
+		def ##(id: String) = CssIdSelector(None, id)
 	}
 
 	final class Declaration(val property: CssProperty) {
