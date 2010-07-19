@@ -6,6 +6,8 @@ import cssx.Css
  */
 object Main {
 	def main(args: Array[String]) {
+		//simple example of how to use cssx
+		
 		val x = new Css {
 			div > (div%"test" & div%"test2") > h1 is {
 				width ~ 256.px
