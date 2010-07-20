@@ -20,8 +20,6 @@
  */
 package cssx.ast
 
-import java.io.{PrintWriter => JPrintWriter}
-
 /**
  * @author Joa Ebert
  */
