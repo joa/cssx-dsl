@@ -23,6 +23,11 @@ package cssx.ast {
 	 * @author Joa Ebert
 	 */
 	trait CssSelector {
+		def accept(visitor: CssASTVisitor): Boolean = {
+			visitor beginVisit this
+			visitor endVisit this
+		}
+
 		private def mkList(x: List[CssSelector]): CssSelector = {
 			def loop(y: CssSelector, ys: List[CssSelector]): CssSelector = ys match {
 				case x :: Nil => CssSelectorList(y, x)

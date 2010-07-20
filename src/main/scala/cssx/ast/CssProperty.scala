@@ -34,6 +34,11 @@ package cssx.ast {
 		 * The string representation of the current object.
  		 */
 		override def toString = name
+
+		def accept(visitor: CssASTVisitor): Boolean = {
+			visitor beginVisit this
+			visitor endVisit this
+		}
 	}
 
 	class StringBasedProperty(val name: String) extends CssProperty

@@ -47,5 +47,7 @@ object Main {
 		}
 
 		println(css.toAST)
+
+		css.toAST.accept(new CssPrintVisitor(Console.out, true))
 	}
 }

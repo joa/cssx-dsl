@@ -22,7 +22,12 @@ package cssx.ast {
 	/**
 	 * @author Joa Ebert
 	 */
-	sealed trait CssValue
+	sealed trait CssValue {
+		def accept(visitor: CssASTVisitor): Boolean = {
+			visitor beginVisit this
+			visitor endVisit this
+		}
+	}
 
 	case class CssPxValue(value: Int) extends CssValue {
 		def px = this

@@ -24,7 +24,9 @@ package cssx.ast {
 	 * 
 	 * @author Joa Ebert
 	 */
-	sealed trait CssStatement
+	sealed trait CssStatement {
+		def accept(visitor: CssASTVisitor): Boolean
+	}
 
 	/**
 	 * The CssRuleset class represents a css ruleset.
@@ -36,5 +38,19 @@ package cssx.ast {
 	 */
 	case class CssRuleset(selector: CssSelector, declarations: List[CssDeclaration]) extends CssStatement {
 		override def toString = selector.toString+"{"+(declarations mkString ";")+"}"
+
+		override def accept(visitor: CssASTVisitor): Boolean = {
+			if(visitor beginVisit this) {
+				if(selector accept visitor) {
+					for(declaration <- declarations) {
+						if(!(declaration accept visitor)) {
+							return (visitor endVisit this)
+						}
+					}
+				}
+			}
+
+			visitor endVisit this
+		}
 	}
 }

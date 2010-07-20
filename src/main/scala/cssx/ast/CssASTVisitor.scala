@@ -14,29 +14,35 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with Apparat. If not, see <http://www.gnu.org/licenses/>.
  *
- * Copyright (C) 2010 Joa Ebert
+ * Copyright (C) 2009 Joa Ebert
  * http://www.joa-ebert.com/
  *
  */
 package cssx.ast {
+
 	/**
-	 * The CssStylesheet class represents the toplevel element of the Css AST.
-	 * 
 	 * @author Joa Ebert
 	 */
-	case class CssStylesheet(statements: List[CssStatement]) {
-		override def toString = statements mkString "\n"
+	trait CssASTVisitor {
+		def beginVisit(value: CssStylesheet): Boolean
+		def endVisit(value: CssStylesheet): Boolean
 
-		def accept(visitor: CssASTVisitor): Boolean = {
-			if(visitor beginVisit this) {
-				for(statement <- statements) {
-					if(!(statement accept visitor)) {
-						return (visitor endVisit this)
-					}
-				}
-			}
-			
-			visitor endVisit this
-		}
+		def beginVisit(value: CssStatement): Boolean
+		def endVisit(value: CssStatement): Boolean
+
+		def beginVisit(value: CssRuleset): Boolean
+		def endVisit(value: CssRuleset): Boolean
+
+		def beginVisit(value: CssSelector): Boolean
+		def endVisit(value: CssSelector): Boolean
+
+		def beginVisit(value: CssDeclaration): Boolean
+		def endVisit(value: CssDeclaration): Boolean
+
+		def beginVisit(value: CssProperty): Boolean
+		def endVisit(value: CssProperty): Boolean
+
+		def beginVisit(value: CssValue): Boolean
+		def endVisit(value: CssValue): Boolean
 	}
 }

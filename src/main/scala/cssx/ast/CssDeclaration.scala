@@ -39,5 +39,15 @@ package cssx.ast {
 		 * The string representation of the current object.
 		 */
 		override def toString = property.toString+":"+value.toString
+
+		def accept(visitor: CssASTVisitor): Boolean = {
+			if(visitor beginVisit this) {
+				if(property accept visitor) {
+					value accept visitor	
+				}
+			}
+
+			visitor endVisit this
+		}
 	}
 }
