@@ -6,48 +6,47 @@ import cssx.Css
  */
 object Main {
 	def main(args: Array[String]) {
-		// Simple example of how to use CSSX
-		// & is the ", " conjuction
-		// a##b selects by identifier b ("div##b" equals "div#b")
-		// ##(b) selects the identifier b ("##(b)" equals "#b")
-		// a>b selects the child b of a ("a>b" equals "a>b")
-		// a { b { ... } } is the desendant selector ("a { b { ... } }" equals "a b { ... }")
-		
-		val css = new Css {
-			// This is equivalent to the following CSS selector:
-			// div > div#identifier.class0 > div, div > div.class1 > div
-			div > (div##"identifier"%"class0" & div%"class1") > div is {
-				width ~ 100.percent
+		/*val css = new Css {
+			div ~> (div~#"identifier"~%"class0" & div~%"class1") ~> div is {
+				width := 100.percent
 
-				// This resulits in the crossproduct of the selectors
-				// (div > div#identifier.class0 > div, div > div.class1 > div)
-				// and (div, span). It is equivalent to the following CSS selector:
-				//
-				// div > div#identifier.class0 > div div,
-				// div > div#identifier.class0 > div span,
-				// div > div.class1 > div div,
-				// div > div.class1 > div span
 				div & span is {
 					h1 & h2 is {
-						width ~ 1.em
+						width := 1.em
+						padding := 0.px
 					}
 
-					width ~ 256.px
+					backgroundColor := 0x333333.hex
+					width := 256.px
 				}
 
 				h1 & h2 is {
-					width ~ 2.em
+					width := 2.em
 				}
 			}
 
-			##("id") is {
-				width ~ 100.percent
-				height ~ 100.percent
+			$("id") is {
+				width := 100.percent
+				height := 100.percent
+			}
+		}*/
+
+
+		val css = new Css {
+			input is {
+				width := 960.px
+			}
+
+			div ~# "meinforumlar" is {
+				input is {
+					width := 200.px
+				}
 			}
 		}
 
-		println(css.toAST)
-
+		println("---NORMAL---")
+		css.toAST.accept(new CssPrintVisitor(Console.out))
+		println("---COMPRESSED---")
 		css.toAST.accept(new CssPrintVisitor(Console.out, true))
 	}
 }

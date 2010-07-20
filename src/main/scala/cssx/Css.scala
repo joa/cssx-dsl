@@ -51,17 +51,19 @@ package cssx {
 		implicit def withRuleset(value: CssSelector): Ruleset = newRuleset(value)
 
 		implicit def intToPx(value: Int) = CssPxValue(value)
+		implicit def intToColor(value: Int) = CssHexValue(value)
 		implicit def intToEm(value: Int) = doubleToEm(value.toDouble)
 		implicit def doubleToEm(value: Double) = CssEmValue(value)
 		implicit def intToPercent(value: Int) = doubleToPercent(value.toDouble)
 		implicit def doubleToPercent(value: Double) = CssPercentValue(value)
 
-		def ##(id: String) = CssIdSelector(None, id)
+		def $(id: String) = CssIdSelector(None, id)
+		def rgb(red: Int, green: Int, blue: Int) = CssHexValue((red << 0x10) | (green << 0x08) | blue)
 	}
 
 	final class Declaration(val property: CssProperty) {
 		var value: Option[CssValue] = None
-		def ~(value: CssValue) = this.value = Some(value)
+		def :=(value: CssValue) = this.value = Some(value)
 		def toCssDeclaration = value match {
 			case Some(v) => CssDeclaration(property, v) :: Nil
 			case None => Nil

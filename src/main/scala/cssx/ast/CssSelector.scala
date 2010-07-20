@@ -1,28 +1,8 @@
-/*
- * This file is part of Apparat.
- *
- * Apparat is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Apparat is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public License
- * along with Apparat. If not, see <http://www.gnu.org/licenses/>.
- *
- * Copyright (C) 2010 Joa Ebert
- * http://www.joa-ebert.com/
- *
- */
 package cssx.ast {
 	/**
 	 * @author Joa Ebert
 	 */
-	trait CssSelector {
+	sealed trait CssSelector {
 		def accept(visitor: CssASTVisitor): Boolean = {
 			visitor beginVisit this
 			visitor endVisit this
@@ -42,33 +22,72 @@ package cssx.ast {
 			}
 		}
 
-		private def crossProduct(x: CssSelector, y: CssSelector)(op: (CssSelector, CssSelector) => CssSelector): CssSelector = {
-			mkList(for{
-				a <- x.toList
-				b <- y.toList
-			} yield op(a, b))
-		}
-		
+		private def crossProduct(x: CssSelector, y: CssSelector)(op: (CssSelector, CssSelector) =>
+				CssSelector): CssSelector =  mkList(for(a <- x.toList; b <- y.toList) yield op(a, b))
+
 		def name: String
 		def toList: List[CssSelector]
 
 		override def toString = name
 
 		def and(that: CssSelector) = &(that)
-		def withClass(that: String) = %(that)
-		def withDescendant(that: CssSelector) = \(that)
-		def withChild(that: CssSelector) = >(that)
-		def withId(that: String) = ##(that)
 
+		def withClass(that: String) = this ~% that
+		def withDescendant(that: CssSelector) = this ~/ that
+		def withChild(that: CssSelector) = this ~> that
+		def withImmediateSuccessor(that: CssSelector) = this ~+ that
+		def withSuccessor(that: CssSelector) = this ~~ that
+		def withId(that: String) = this ~# that
+
+		/**
+		 * <code>E & F</code> equals <code>E, F</code>.
+		 */
 		def &(that: CssSelector) = CssSelectorList(this, that)
-		def %(that: String) = mkList(this.toList map { x => CssClassSelector(Some(x), that) })
-		def \(that: CssSelector) = crossProduct(this, that) { CssDescendantSelector(_, _) }
-		def >(that: CssSelector) = crossProduct(this, that) { CssChildSelector(_, _) }
-		def ##(that: String) = mkList(this.toList map { x => CssIdSelector(Some(x), that) })
+		def |(that: CssSelector) = this & that
+
+		/**
+		 * <code>E ~% "warning"</code> equals <code>E.warning</code>.
+		 */
+		def ~%(that: String) = mkList(this.toList map { x => CssClassSelector(Some(x), that) })
+
+		/**
+		 * <code>E ~/ F</code> equals <code>E F</code>.
+		 */
+		def ~/(that: CssSelector) = crossProduct(this, that) { CssDescendantSelector(_, _) }
+
+		/**
+		 * <code>E ~> F</code> equals <code>E > F</code>.
+		 */
+		def ~>(that: CssSelector) = crossProduct(this, that) { CssChildSelector(_, _) }
+
+		/**
+		 * <code>E ~+ F</code> equals <code>E + F</code>.
+		 */
+		def ~+(that: CssSelector) = crossProduct(this, that) { CssImmediatelyPrecededSelector(_, _) }
+
+		/**
+		 * <code>E ~~ F</code> equals <code>E ~ F</code>.
+		 */
+		def ~~(that: CssSelector) = crossProduct(this, that) { CssPrecededSelector(_, _) }
+
+		/**
+		 * <code>E ~# "myid"</code> equals <code>E#myid</code>.
+		 */
+		def ~#(that: String) = mkList(this.toList map { x => CssIdSelector(Some(x), that) })
 	}
 
 	case class CssChildSelector(parent: CssSelector, child: CssSelector) extends CssSelector {
 		override def name = parent.toString+">"+child.toString
+		override def toList = this :: Nil
+	}
+
+	case class CssImmediatelyPrecededSelector(predecessor: CssSelector, successor: CssSelector) extends CssSelector {
+		override def name = predecessor.toString+"+"+successor.toString
+		override def toList = this :: Nil
+	}
+
+	case class CssPrecededSelector(predecessor: CssSelector, successor: CssSelector) extends CssSelector {
+		override def name = predecessor.toString+"~"+successor.toString
 		override def toList = this :: Nil
 	}
 
