@@ -39,6 +39,7 @@ object Main {
 
 			div ~# "meinforumlar" is {
 				input is {
+					padding := 1.px ~ 2.px ~ 3.px ~ 4.px
 					width := 200.px
 				}
 			}

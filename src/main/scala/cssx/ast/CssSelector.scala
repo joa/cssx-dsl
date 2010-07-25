@@ -30,7 +30,8 @@ package cssx.ast {
 
 		override def toString = name
 
-		def and(that: CssSelector) = &(that)
+		def and(that: CssSelector) = this & that
+		def or(that: CssSelector) = this | that
 
 		def withClass(that: String) = this ~% that
 		def withDescendant(that: CssSelector) = this ~/ that

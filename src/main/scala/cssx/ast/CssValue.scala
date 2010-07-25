@@ -32,6 +32,12 @@ package cssx.ast {
 			case x if x endsWith ".0" => x.substring(0, x.length - 2)
 			case other => other
 		}
+
+		def ~(that: CssValue) = new ~(this, that)
+	}
+
+	case class ~(left: CssValue, right: CssValue) extends CssValue {
+		override def toString = left.toString+" "+right.toString
 	}
 
 	//
