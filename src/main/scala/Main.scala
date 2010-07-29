@@ -1,10 +1,12 @@
 import cssx.ast._
+import cssx.Css._
 import cssx.Css
 
 /**
  * @author Joa Ebert
  */
 object Main {
+
 	def main(args: Array[String]) {
 		/*val css = new Css {
 			div ~> (div~#"identifier"~%"class0" & div~%"class1") ~> div is {
@@ -37,7 +39,7 @@ object Main {
 				width := 960.px
 			}
 
-			div ~# "meinforumlar" is {
+			div ~# "someform" is {
 				input is {
 					padding := 1.px ~ 2.px ~ 3.px ~ 4.px
 					width := 200.px

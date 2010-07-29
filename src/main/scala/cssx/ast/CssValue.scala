@@ -85,7 +85,7 @@ package cssx.ast {
 	}
 
 	case class CssChValue(value: Double) extends CssValue {
-		def vm = this
+		def ch = this
 		override def toString = doubleToString(value)+"vm"
 	}
 
@@ -104,17 +104,17 @@ package cssx.ast {
 	}
 
 	case class CssMmValue(value: Double) extends CssValue {
-		def in = this
+		def mm = this
 		override def toString = doubleToString(value)+"mm"
 	}
 
 	case class CssPtValue(value: Double) extends CssValue {
-		def in = this
+		def pt = this
 		override def toString = doubleToString(value)+"pt"
 	}
 
 	case class CssPcValue(value: Double) extends CssValue {
-		def in = this
+		def pc = this
 		override def toString = doubleToString(value)+"pc"
 	}
 
